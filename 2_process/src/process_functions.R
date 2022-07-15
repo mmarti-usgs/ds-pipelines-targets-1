@@ -10,8 +10,8 @@ library(sbtools)
 library(whisker)
 
 # prepare/clean data for plotting
-prep_data <- function(data, project_output_dir) {
-  mendota_file <- file.path("1_fetch/out", 'model_RMSEs.csv')
+prep_data <- function(data, outPath) {
+  mendota_file <- outPath
   readr::read_csv(mendota_file, col_types = 'iccd') %>%
     filter(str_detect(exper_id, 'similar_[0-9]+')) %>%
     mutate(col = case_when(
@@ -27,13 +27,13 @@ prep_data <- function(data, project_output_dir) {
 
 
 # save processed data
-save_processed_data <- function(eval_data, project_output_dir){
-  readr::write_csv(eval_data, file = file.path(project_output_dir, 'model_summary_results.csv'))
+save_processed_data <- function(eval_data, outPath){
+  readr::write_csv(eval_data, file = outPath)
 }
 
 
 # save model diagnostics
-save_model_diagnostics <- function(eval_data, project_output_dir){
+save_model_diagnostics <- function(eval_data, outPath){
   render_data <- list(pgdl_980mean = filter(eval_data, model_type == 'pgdl', exper_id == "similar_980") %>% pull(rmse) %>% mean %>% round(2),
                       dl_980mean = filter(eval_data, model_type == 'dl', exper_id == "similar_980") %>% pull(rmse) %>% mean %>% round(2),
                       pb_980mean = filter(eval_data, model_type == 'pb', exper_id == "similar_980") %>% pull(rmse) %>% mean %>% round(2),
@@ -49,5 +49,5 @@ save_model_diagnostics <- function(eval_data, project_output_dir){
   ({{dl_500mean}} and {{pb_500mean}}°C, respectively) or more, but worse than PB when training was reduced to 100 profiles ({{dl_100mean}} and {{pb_100mean}}°C respectively) or fewer.
   The PGDL prediction accuracy was more robust compared to PB when only two profiles were provided for training ({{pgdl_2mean}} and {{pb_2mean}}°C, respectively). '
   
-  whisker.render(template_1 %>% str_remove_all('\n') %>% str_replace_all('  ', ' '), render_data ) %>% cat(file = file.path(project_output_dir, 'model_diagnostic_text.txt'))
+  whisker.render(template_1 %>% str_remove_all('\n') %>% str_replace_all('  ', ' '), render_data ) %>% cat(file = outPath)
 }
