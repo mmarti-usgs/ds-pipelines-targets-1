@@ -20,7 +20,7 @@ list(
   # Create a plot
   tar_target(
     figure_1_png,
-    create_plot(eval_data, outPath = "3_visualize/out/figure_1.png"), 
+    create_plot(data = eval_data, outPath = "3_visualize/out/figure_1.png"), 
     format = "file"
   ),
   # Save the processed data
