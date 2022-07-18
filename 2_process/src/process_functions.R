@@ -10,9 +10,8 @@ library(sbtools)
 library(whisker)
 
 # prepare/clean data for plotting
-prep_data <- function(data, outPath) {
-  mendota_file <- outPath
-  readr::read_csv(mendota_file, col_types = 'iccd') %>%
+prep_data <- function(data) {
+  data %>%
     filter(str_detect(exper_id, 'similar_[0-9]+')) %>%
     mutate(col = case_when(
       model_type == 'pb' ~ '#1b9e77',
