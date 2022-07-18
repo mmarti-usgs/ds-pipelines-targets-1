@@ -11,7 +11,7 @@ library(whisker)
 
 # prepare/clean data for plotting
 prep_data <- function(data) {
-  data %>%
+  readr::read_csv(data, col_types = 'iccd') %>%
     filter(str_detect(exper_id, 'similar_[0-9]+')) %>%
     mutate(col = case_when(
       model_type == 'pb' ~ '#1b9e77',
@@ -28,6 +28,7 @@ prep_data <- function(data) {
 # save processed data
 save_processed_data <- function(eval_data, outPath){
   readr::write_csv(eval_data, file = outPath)
+  return(outPath)
 }
 
 
@@ -49,4 +50,5 @@ save_model_diagnostics <- function(eval_data, outPath){
   The PGDL prediction accuracy was more robust compared to PB when only two profiles were provided for training ({{pgdl_2mean}} and {{pb_2mean}}°C, respectively). '
   
   whisker.render(template_1 %>% str_remove_all('\n') %>% str_replace_all('  ', ' '), render_data ) %>% cat(file = outPath)
+  return(outPath)
 }
