@@ -20,7 +20,7 @@ list(
   # Create a plot
   tar_target(
     figure_1_png,
-    create_plot(outPath = "3_visualize_out/figure_1.png", data = eval_data), 
+    create_plot(eval_data, outPath = "3_visualize/out/figure_1.png"), 
     format = "file"
   ),
   # Save the processed data
@@ -32,7 +32,7 @@ list(
   # Save the model diagnostics
   tar_target(
     model_diagnostic_text_txt,
-    save_model_diagnostics(outPath = "2_process/out/model_diagnostic_text.txt", data = eval_data), 
+    save_model_diagnostics(eval_data, outPath = "2_process/out/model_diagnostic_text.txt"), 
     format = "file"
   )
 )
